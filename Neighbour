@@ -1,0 +1,20 @@
+package mini;
+
+public class Neighbour {
+	public int vertexNumb;
+	public Neighbour next;
+	public int amount;
+
+	public Neighbour(int vertexNumb, Neighbour next)
+	{
+		this.vertexNumb = vertexNumb;
+		this.next = next;
+	}
+
+	public Neighbour(int vertexNumb, Neighbour next, int amount)
+	{
+		this.vertexNumb = vertexNumb;
+		this.next = next;
+		this.amount = amount;
+	}
+}
