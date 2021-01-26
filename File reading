@@ -1,0 +1,260 @@
+package mini;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class Files{
+	public Files()
+	{
+		MyGraph<String> graph = new MyGraph<String>();
+		//writing a file
+		try {
+			File donationFile = new File("donation.txt");
+			FileOutputStream is = new FileOutputStream(donationFile);
+			OutputStreamWriter osw = new OutputStreamWriter(is);    
+			Writer w = new BufferedWriter(osw);
+			// add a bunch of edges
+			graph.add("FROM Qatar", " Afghanistan RECEIVED", 250000000);
+			graph.add("FROM Singapore", "Mozambique RECEIVED", 630000000);
+			graph.add("FROM Brunei ", "Uganda RECEIVED", 930000000);
+			graph.add("FROM Kuwait", "Tajikistan RECEIVED", 570000000);
+			graph.add("FROM Japan", "Yemen RECEIVED", 100000000);
+			graph.add("FROM Norway", "Haiti RECEIVED", 90000000);
+			graph.add("FROM Luxembourg", "Ethiopia RECEIVED", 48000000);
+			graph.add("FROM Switzerland", "Tanzania RECEIVED", 450000000);
+			graph.add("FROM Finland", "Kyrgyzstan RECEIVED", 390000000);
+			graph.add("FROM Canada", "Zambia RECEIVED", 800000000);
+			graph.add("FROM Germany", "Pakistan RECEIVED", 69000000);
+			graph.add("FROM Netherlands", "Cambodia RECEIVED", 200000000);
+			graph.add("FROM Denmark", "Laos RECEIVED", 750000000);
+			graph.add("FROM Austria", "Morocco RECEIVED", 270000000);
+			graph.add("FROM Iceland", "Mongolia RECEIVED", 200000000);
+			graph.add("FROM Sweden", "Indonesia RECEIVED", 220000000);
+			graph.add("FROM Norway", "Iraq RECEIVED", 280000000);
+			graph.add("FROM United_Arab_Emirates", "South_Africa RECEIVED", 200000000);
+			graph.add("FROM Hong_Kong_SAR", "Thailand RECEIVED", 550000000);
+			graph.add("FROM Finland", "DRC RECEIVED", 350000000);
+			graph.add("FROM Belgium", "Uzbekistan RECEIVED", 530000000);
+			graph.add("FROM France ", "Myanmar RECEIVED", 830000000);
+			graph.add("FROM United_Kingdom", "CDI RECEIVED", 670000000);
+			graph.add("FROM Israel", "Vietnam RECEIVED", 230000000);
+			graph.add("FROM Italy", "Honduras RECEIVED", 40000000);
+			graph.add("FROM Korea", "Egypt RECEIVED", 48000000);
+			graph.add("FROM Spain", "Ukraine RECEIVED", 450000000);
+			graph.add("FROM Puerto_Rico", "Angola RECEIVED", 890000000);
+			graph.add("FROM Malta", "Philippines RECEIVED", 880000000);
+			graph.add("FROM Brunei", "Moldova RECEIVED", 19000000);
+			graph.add("FROM Cyprus", "Tunisia RECEIVED", 500000000);
+			graph.add("FROM Slovenia", "Bolivia RECEIVED", 550000000);
+			graph.add("FROM Taiwan", "Venezuela RECEIVED", 670000000);
+			graph.add("FROM Bahrain", "	El'Salvador RECEIVED", 700000000);
+			graph.add("FROM Ireland", "SriLanka RECEIVED", 720000000);
+			graph.add("FROM Czech_Republic ", "Algeria RECEIVED", 780000000);
+			graph.add("FROM Portugal", "Georgia RECEIVED", 900000000);
+			graph.add("FROM Estonia", "Armenia RECEIVED", 950000000);			
+
+			w.write(graph.edgesToString());
+
+			System.out.println(graph.edgesToString());
+
+			w.close();
+		}
+		catch (IOException e)
+		{
+			System.err.println("PRIBLEM WITH WRITING A FILE");
+		}
+		StringTokenizer sTokens;
+		int money = 0;
+		String doner;
+		String receiver;
+		String pre;
+		String suf;
+		//reading from a file		
+		try
+		{
+			File textFile = new File("donation.txt");
+			Scanner input = new Scanner(textFile);
+
+			FileWriter jFile = new FileWriter("amountRecived.txt");
+			BufferedWriter bw = new BufferedWriter(jFile);
+
+			//Received
+			while(input.hasNext())
+			{
+				sTokens = new StringTokenizer(input.nextLine());
+
+				receiver = sTokens.nextToken();
+				pre = sTokens.nextToken();
+				money = Integer.parseInt(sTokens.nextToken());
+				doner = sTokens.nextToken();
+				suf = sTokens.nextToken();
+				System.out.println(receiver + " should receive " + money + " from " + doner);
+
+				//writing the name of the country as well as the amount of money they received
+				bw.write(receiver+" needs "+ money+"\n");
+			}
+			bw.close();
+			input.close();
+		}
+		catch (IOException e)
+		{
+			System.err.println("PRIBLEM WITH READING FROM A FILE");
+		}
+
+		try
+		{
+			//write a file
+			File h = new File("Infrastructure.txt");
+			FileOutputStream is = new FileOutputStream(h);
+			OutputStreamWriter osw = new OutputStreamWriter(is);    
+			Writer w = new BufferedWriter(osw);
+
+			//this should be the country as well as the infrastructure that needs to be built
+			w.write("30" +"\n");
+			w.write("Afghanistan" +"\n");
+			w.write("Mozambique" +"\n");
+			w.write("Uganda" +"\n");
+			w.write("Tajikistan" +"\n");
+			w.write("Yemen" +"\n");
+			w.write("Haiti" +"\n");
+			w.write("Ethiopia" +"\n");
+			w.write("Tanzania" +"\n");
+			w.write("Kyrgyzstan" +"\n");
+			w.write("Zambia" +"\n");
+			w.write("Pakistan" +"\n");
+			w.write("Cambodia" +"\n");
+			w.write("Laos" +"\n");
+			w.write("Morocco" +"\n");
+			w.write("Mongolia" +"\n");
+			w.write("Indonesia" +"\n");
+			w.write("Iraq" +"\n");
+			w.write("South_Africa" +"\n");
+			w.write("Thailand" +"\n");
+			w.write("mining" +"\n");
+			w.write("poultryFarming" +"\n");
+			w.write("agriculture" +"\n");
+			w.write("exportingOfRawMaterials" +"\n");
+			w.write("salesOfFurniture" +"\n");
+			w.write("transportation" +"\n");
+			w.write("oilAndGasBusiness" +"\n");
+			w.write("tourism" +"\n");
+			w.write("engineering" +"\n");
+			w.write("retail" +"\n");
+			w.write("construction" +"\n");
+			
+			w.write("Afghanistan mining" +"\n");
+			w.write("Afghanistan agriculture" +"\n");
+			w.write("Mozambique mining" +"\n");
+			w.write("Mozambique poultryFarming" +"\n");
+			w.write("Mozambique agriculture" +"\n");
+			w.write("Mozambique tourism" +"\n");
+			w.write("Uganda poultryFarming" +"\n");
+			w.write("Uganda engineering" +"\n");
+			w.write("Uganda tourism" +"\n");
+			w.write("Uganda salesOfFurniture" +"\n");
+			w.write("Tajikistan agriculture" +"\n");
+			w.write("Tajikistan oilAndGasBusiness" +"\n");
+			w.write("Yemen retail" +"\n");
+			w.write("Yemen tourism" +"\n");
+			w.write("Yemen transportation" +"\n");
+			w.write("Yemen oilAndGasBusiness" +"\n");
+			w.write("Haiti mining" +"\n");
+			w.write("Haiti construction" +"\n");
+			w.write("Ethiopia mining" +"\n");
+			w.write("Ethiopia poultryFarming" +"\n");
+			w.write("Ethiopia retail" +"\n");
+			w.write("Tanzania exportingOfRawMaterials" +"\n");
+			w.write("Tanzania poultryFarming" +"\n");
+			w.write("Tanzania agriculture" +"\n");
+			w.write("Kyrgyzstan tourism" +"\n");
+			w.write("Kyrgyzstan salesOfFurniture" +"\n");
+			w.write("Zambia retail" +"\n");
+			w.write("Zambia exportingOfRawMaterials" +"\n");
+			w.write("Zambia oilAndGasBusiness" +"\n");
+			w.write("Pakistan agriculture" +"\n");
+			w.write("Pakistan transportation" +"\n");
+			w.write("Pakistan oilAndGasBusiness" +"\n");
+			w.write("Cambodia mining" +"\n");
+			w.write("Cambodia construction" +"\n");
+			w.write("Laos mining" +"\n");
+			w.write("Laos poultryFarming" +"\n");
+			w.write("Laos agriculture" +"\n");
+			w.write("Laos engineering" +"\n");
+			w.write("Morocco poultryFarming" +"\n");
+			w.write("Morocco retail" +"\n");
+			w.write("Morocco exportingOfRawMaterials" +"\n");
+			w.write("Morocco salesOfFurniture" +"\n");
+			w.write("Mongolia agriculture" +"\n");
+			w.write("Mongolia construction" +"\n");
+			w.write("Indonesia oilAndGasBusiness" +"\n");
+			w.write("Indonesia agriculture" +"\n");
+			w.write("Indonesia engineering" +"\n");
+			w.write("Indonesia transportation" +"\n");
+			w.write("Iraq oilAndGasBusiness" +"\n");
+			w.write("South_Africa retail" +"\n");
+			w.write("South_Africa oilAndGasBusiness" +"\n");
+			w.write("South_Africa transportation" +"\n");
+			w.write("Thailand agriculture" +"\n");
+			w.write("Thailand oilAndGasBusiness" +"\n");
+			
+			//read from file
+			/*File textFile = new File("amountRecived.txt");
+			Scanner input = new Scanner(textFile);
+			//Received
+			while(input.hasNext())
+			{
+				sTokens = new StringTokenizer(input.nextLine());
+
+				receiver = sTokens.nextToken();
+				pre = sTokens.nextToken();
+				money = Integer.parseInt(sTokens.nextToken());
+				System.out.println(receiver + " should receive " + money);
+				
+				if(money>0 && money<10000000)
+				{
+					w.write(receiver +" mining" +"\n");
+					w.write(receiver +" agriculture" +"\n");
+				}else if(money>=10000000 && money<100000000)
+				{
+					w.write(receiver +" mining" +"\n");
+					w.write(receiver +" retail" +"\n");
+				}else if(money>=100000000 && money<200000000)
+				{
+					w.write(receiver +" mining" +"\n");
+					w.write(receiver +" poultryFarming" +"\n");
+				}else if(money>=200000000 && money<300000000)
+				{
+					w.write(receiver +" exportingOfRawMaterials" +"\n");
+					w.write(receiver +" salesOfFurniture" +"\n");
+				}else if(money>=300000000 && money<400000000)
+				{
+					w.write(receiver +" mining" +"\n");
+					w.write(receiver +" agriculture" +"\n");
+					w.write(receiver +" transportation" +"\n");
+				}else if(money>=400000000 && money<700000000)
+				{
+					w.write(receiver +" mining" +"\n");
+					w.write(receiver +" transportation" +"\n");
+					w.write(receiver +" oilAndGasBusiness" +"\n");
+				}else if(money>=700000000 && money<1000000000)
+				{
+					w.write(receiver +" mining" +"\n");
+					w.write(receiver +" agriculture" +"\n");
+					w.write(receiver +" poultryFarming" +"\n");
+				}
+			}
+			*/
+			w.close();
+		}
+		catch (IOException e)
+		{
+			System.err.println("PRIBLEM WITH READING FROM A FILE");
+		}
+	}
+}
