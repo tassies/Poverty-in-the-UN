@@ -1,0 +1,85 @@
+package mini;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import mini.MyGraph.Country;
+
+public class Vertex<T extends Comparable<T>>{
+
+	public String Countryname;
+	public Neighbour myList;
+	public int amount;	
+	T value;
+
+	//variables for Dijkstra Tree
+	Vertex<T> prev = null;
+	int minimunDist = Integer.MAX_VALUE;
+
+	List<Vertex<T>> coming;
+	List<Vertex<T>> going;
+	Country Country;
+
+	public Vertex(String Countryname, Neighbour myList)
+	{
+		this.Countryname = Countryname;
+		this.myList = myList;
+	}
+
+	public Vertex(String Countryname, Neighbour myList, int money)
+	{
+		this.Countryname = Countryname;
+		this.myList = myList;
+		this.amount = money;
+	}
+
+	/**
+	 * Creates new Vertex with value T
+	 * @param value T
+	 */
+	@SuppressWarnings("static-access")
+	public Vertex(T value)
+	{
+		this.value = value;
+		coming = new ArrayList<>();
+		going = new ArrayList<>();
+		Country = Country.IN_NEED;
+	}
+
+	/**
+	 * @param other Vertex to compare to
+	 */
+	public int compareTo(Vertex<T> other)
+	{
+		return Integer.compare(minimunDist, other.minimunDist);
+	}
+
+	/**
+	 * Add Vertex to adjacent coming list
+	 * @param vert Vertex of coming adjacent
+	 */
+	public void addcoming(Vertex<T> vertex)
+	{
+		coming.add(vertex);
+	}
+	public void addgoing(Vertex<T> vertex)
+	{
+		going.add(vertex);
+	}
+
+	/**
+	 * Get string of Vertex with all it's in-going and going
+	 * @ return string
+	 */
+	@Override
+	public String toString()
+	{
+		String retval = "";
+		retval += "Vertex: " + value + " : ";
+		retval += " in: ";
+		for(Vertex<T> each : coming) retval+= each.value + " ";
+		retval += "Out: ";
+		for(Vertex<T> each : going) retval += each.value + " ";
+		return retval;
+	}
+}
