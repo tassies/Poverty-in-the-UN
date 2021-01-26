@@ -1,0 +1,18 @@
+package mini;
+
+import javax.swing.JFrame;
+
+public class Main {
+
+	public static <T extends Comparable<T>> void main(String[] args){
+		new Files();
+		MyGraph<T> graph = new MyGraph<T>();
+		graph.print();
+		GUI gui = new GUI();
+		gui.setTitle("REDUCING POVERTY");
+		gui.setSize(1300,900);
+		gui.setLocationRelativeTo(null);
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gui.setVisible(true);
+	}
+}
