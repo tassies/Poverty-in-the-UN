@@ -1,0 +1,523 @@
+package mini;
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
+/**
+ * This project will focus on solving the problem of poverty in the world.
+ * Countries with more money will contribute/donate money to under developed/poor countries.
+ * The money donated to these countries will be used to create employment and build infrastructure.
+ * Instead of just giving money to people in ways such as "grant money", it is better to create employment so that they can be
+ * satisfied with the money they receive and will therefore use the money more wisely and with much care
+ * since they worked for it.
+ * This will also ensure that people have a somewhat steady income and will not have to rely on others to
+ * give them money at all times.
+ * Employment will help these country's develop their "gross" and "GDP" as well as develop the countries "economy"
+ * and also strengthen it. This enabling the country itself to no longer be dependent on other countries for financial 
+ * support and will no longer be poor.
+ * The country will no longer have more people living below the standards of living, thus reducing poverty in the country
+ * and in this way we can reduce poverty throughout the whole world.
+ * @author Rendani Mudau
+ */
+public class MyGraph<T extends Comparable<T>>
+{
+	public enum Country
+	{ IN_NEED, 
+		GIVE, 		
+		RECEIVED 
+	};
+
+	private ArrayList<Vertex<T>> vertices;
+	private ArrayList<Edge> edges;
+	Vertex<T>[] myLists;
+	Scanner sc = null;
+	class Edge
+	{
+		Vertex<T> source;
+		Vertex<T> dest;
+		int money;
+
+		/**
+		 * @param v1 value of type T for 'source' vertex
+		 * @param v2 value of type T for 'dest' vertex
+		 * @param money integer value for money/weight of edge
+		 */
+		public Edge(T v1, T v2, int money)
+		{
+			source = findingVertex(v1);
+			if(source == null)
+			{
+				source = new Vertex<T>(v1);
+				vertices.add(source);
+			}
+			dest = findingVertex(v2);
+			if(dest == null)
+			{
+				dest = new Vertex<T>(v2);
+				vertices.add(dest);
+			}
+			this.money = money;
+
+			source.addgoing(dest);
+			dest.addcoming(source);
+		}
+
+		/**
+		 * @return Edge as string
+		 */
+		@Override
+		public String toString()
+		{
+			return dest.value + " " + money + " " + source.value;
+		}
+	}
+	/**
+	 * Default Constructor
+	 */
+	public MyGraph()
+	{
+		vertices = new ArrayList<>();
+		edges = new ArrayList<>();
+
+		//reading a file
+		try {
+			sc = new Scanner(new File("Infrastructure.txt"));
+
+			myLists = new Vertex[sc.nextInt()];
+
+			for(int i=0; i<myLists.length; i++)
+			{
+				myLists[i] = new Vertex<T>(sc.next(), null);
+			}
+			while(sc.hasNext())
+			{
+				int source = Countrynameindex(sc.next());
+				int dest = Countrynameindex(sc.next());
+
+				myLists[source].myList = new Neighbour(dest, myLists[source].myList);
+				myLists[dest].myList = new Neighbour(source, myLists[dest].myList);
+			}
+		} 
+		catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			System.out.println("NO FILE FOUND");
+		}
+	}
+	int Countrynameindex(String Countryname) 
+	{
+		for(int i=0; i<myLists.length; i++)
+		{
+			if(myLists[i].Countryname.equals(Countryname))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public void print()
+	{
+		try{
+			//write the outcomes to a file called data 
+			File dataFile = new File("data.txt");
+			FileOutputStream fos = new FileOutputStream(dataFile);
+			OutputStreamWriter osw = new OutputStreamWriter(fos);    
+			Writer w = new BufferedWriter(osw);
+
+			for(int i=0; i<myLists.length; i++)
+			{
+				System.out.print(myLists[i].Countryname);
+				w.write(myLists[i].Countryname);
+				for(Neighbour next=myLists[i].myList; next != null; next=next.next)
+				{
+					w.write(" --> " + myLists[next.vertexNumb].Countryname);
+					System.out.print(" --> " + myLists[next.vertexNumb].Countryname);
+				}
+				System.out.println("\n");
+				w.write("\n");
+			}
+			w.close();
+		}
+		catch (FileNotFoundException e)
+		{
+			System.out.println("NO FILE FOUND");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Creates Edge source two values T directed source --> to
+	 * @param source Value for Vertex 1
+	 * @param dest Value for Vertex 2
+	 * @param money or weight of edge
+	 */
+	//source and dest read source separate text files(source-> wealthy & from-> poor)
+	public void add(T source, T dest, int money)
+	{
+		Edge temporary = findingEdge(source, dest);
+		if(temporary != null)
+		{
+			//Don't allow multiple edges, update money.
+			System.out.println("Edge " + source + "," + dest + " already exists. Changing money.");
+			temporary.money = money;
+		}
+		else
+		{
+			// this will create the vertices
+			Edge e = new Edge(source, dest, money);
+			edges.add(e);
+		}
+	}
+
+	/**
+	 * Sets all Country's to IN_NEED
+	 * in_need
+	 */
+	private void allCountryAreInNeed()
+	{
+		for(Vertex<T> e : vertices)
+		{
+			e.Country = Country.IN_NEED;
+		}
+	}
+
+	/**
+	 * Find edge source two values
+	 * @param source source value of type T
+	 * @param to dest value of type T
+	 * @return Edge, or <code>null</code> if not found.
+	 */
+	private Edge findingEdge(T source, T dest)
+	{
+		for(Edge e : edges)
+		{
+			if((e.source.value.equals(source)) && (e.dest.value.equals(dest)))
+			{
+				return e;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Performs a recursive Depth First Search on the
+	 * 'root' node (the first vertex created)
+	 * @return true if connected, false if empty or not connected
+	 */
+	public boolean SearchDepthFirst()
+	{
+		if(vertices.isEmpty()) return false;
+
+		allCountryAreInNeed();
+		// get first node
+		Vertex<T> root = vertices.get(0);
+		if(root==null) return false;
+
+		//call recursive function
+		SearchDepthFirst(root);
+		return isConnected();
+	}
+
+	/**
+	 * Test if DFS or BFS returned a connected graph
+	 * @return true if connected, false if not.
+	 * received
+	 */
+	public boolean isConnected()
+	{
+		for(Vertex<T> e : vertices)
+		{
+			if(e.Country != Country.RECEIVED)
+				return false;
+		}
+		return true;
+	}
+
+
+	/**
+	 * Helper for Depth first search
+	 * @param v vertex
+	 * give
+	 */
+	private void SearchDepthFirst(Vertex<T> v)
+	{
+		v.Country = Country.GIVE;
+
+		// loop through neighbors
+		for(Vertex<T> e : v.going)
+		{
+			if(e.Country ==Country.IN_NEED)
+			{
+				SearchDepthFirst(e);
+			}
+		}
+		v.Country = Country.RECEIVED;
+	}
+
+	/**
+	 * Performs a Breadth-First Search
+	 * starting at 'root' node (First created vertex)
+	 * @return true is connected, false is not or if empty
+	 */
+	public boolean SearchBreadthFirst()
+	{
+		if(vertices.isEmpty()) return false;
+		allCountryAreInNeed();
+
+		Vertex<T> root = vertices.get(0);
+		if(root==null) return false;
+
+		Queue<Vertex<T>> queue = new LinkedList<>();
+		queue.add(root);
+		root.Country = Country.RECEIVED;
+
+		while(!queue.isEmpty())
+		{
+			root = queue.peek();
+			for(Vertex<T> e : root.going)
+			{
+				if(e.Country==Country.IN_NEED)
+				{
+					e.Country = Country.RECEIVED;
+					queue.add(e);
+				}
+			}
+			queue.remove();
+		}
+		return isConnected();
+	}
+
+	/**
+	 * Creates path information on the graph using the Dijkstra Algorithm,
+	 * Puts the information into the Vertices, based on given starting vertex.
+	 * @param v1 Value of type T for starting vertex
+	 * @return true if successful, false if empty or not found.
+	 */
+	private boolean Dijkstra(T v1)
+	{
+		if(vertices.isEmpty())
+		{
+			return false;
+		}
+
+		// reset all vertices mininumDistance and previous
+		resetDist();
+
+		// make sure it is valid
+		Vertex<T> source = findingVertex(v1);
+		if(source==null)
+		{
+			return false;
+		}
+
+		// set to 0 and add to heap
+		source.minimunDist = 0;
+		PriorityQueue<Vertex<T>> priorityqueue = new PriorityQueue<>();
+		priorityqueue.add(source);
+
+		while(!priorityqueue.isEmpty())
+		{
+			/*pull off top of queue
+			 * loop through adjacent vertices
+			 */
+			Vertex<T> u = priorityqueue.poll();
+
+			for(Vertex<T> v : u.going)
+			{
+				/* get edge
+				 * add money to current
+				 */
+				Edge e = findingEdge(u, v);
+				if(e==null)
+				{
+					return false;
+				}
+				int totalDist = u.minimunDist + e.money;
+				if(totalDist < v.minimunDist)
+				{
+					/*new money is smaller, set it and add to queue
+					 *  link vertex
+					 */
+					priorityqueue.remove(v);
+					v.minimunDist = totalDist;
+					v.prev = u;
+					priorityqueue.add(v);
+				}
+			}
+		}
+		return true;
+	}
+	/**
+	 * for Dijkstra, resets all the path tree fields
+	 * Dijkstra or weights/money(how much should the country get)
+	 */
+	private void resetDist()
+	{
+		for(Vertex<T> e : vertices)
+		{
+			e.minimunDist = Integer.MAX_VALUE;
+			e.prev = null;
+		}
+	}
+
+
+	/**
+	 * find Vertex in Graph source value
+	 * @param v value of type T
+	 * @return Vertex, or <code>null</code> if not found.
+	 */
+	private Vertex<T> findingVertex(T v)
+	{
+		for(Vertex<T> e : vertices)
+		{
+			if(e.value.compareTo(v)==0)
+				return e;
+		}
+		return null;
+	}
+
+	/**
+	 * Find edge containing two vertices
+	 * in direction source -> dest
+	 * @param Vertex 'source'
+	 * @param Vertex 'dest'
+	 * @return Edge, or <code>null</code> if not found.
+	 */
+	private Edge findingEdge(Vertex<T> source, Vertex<T> dest)
+	{
+		for(Edge e : edges)
+		{
+			if((e.source.equals(source)) && (e.dest.equals(dest)))
+			{
+				return e;
+			}
+		}
+		return null;
+	}
+	/**
+	 * Performs a Breadth-First Search on a given starting vertex
+	 * @param v1 Value of type T for starting vertex
+	 * @return true if connected, false if not or if empty
+	 */
+	public boolean SearchBreadthFirst(T v1)
+	{
+		if(vertices.isEmpty())
+		{
+			return false;
+		}
+		allCountryAreInNeed();
+
+		Vertex<T> root = findingVertex(v1);
+		if(root==null)
+		{
+			return false;
+		}
+
+		Queue<Vertex<T>> queue = new LinkedList<>();
+		queue.add(root);
+		root.Country = Country.RECEIVED;
+
+		while(!queue.isEmpty())
+		{
+			root = queue.peek();
+			for(Vertex<T> e : root.going)
+			{
+				if(e.Country==Country.IN_NEED)
+				{
+					e.Country = Country.RECEIVED;
+					queue.add(e);
+				}
+			}
+			queue.remove();
+		}
+		return isConnected();
+	}
+	/**
+	 * Goes through the result tree created by the Dijkstra method
+	 * and steps backward
+	 * @param target Vertex end of path
+	 * @return string List of vertices and money
+	 */
+	private List<String> getShortestPath(Vertex<T> goal)
+	{
+		List<String> path = new ArrayList<String>();
+
+		// check for no path found
+		if(goal.minimunDist==Integer.MAX_VALUE)
+		{
+			path.add("No path found");
+			return path;
+		}
+
+		// loop through the vertices source end target 
+		for(Vertex<T> v = goal; v !=null; v = v.prev)
+		{
+			path.add(v.value + " : money : " + v.minimunDist);
+		}
+
+		// flip the list
+		Collections.reverse(path);
+		return path;
+	}
+
+	/**
+	 * @return string of vertices
+	 */
+	String retrive = "";
+	@Override
+	public String toString()
+	{		
+		for(Vertex<T> e : vertices)
+		{
+			retrive += e.toString() + "\n";
+		}
+		return retrive;
+	}
+
+	/**
+	 * list all the edges into a string
+	 * @return string of edge data
+	 */
+	public String edgesToString()
+	{
+		for(Edge e : edges)
+		{
+			retrive += e + "\n";
+		}
+		return retrive;
+	}
+
+	/**
+	 * PUBLIC WRAPPER FOR PRIVATE FUNCTIONS
+	 * Calls the Dijkstra method to build the path tree for the given
+	 * starting vertex, then calls getShortestPath method to return
+	 * a list containing all the steps in the shortest path to
+	 * the destination vertex.
+	 * @param source value of type T for Vertex 'source'
+	 * @param to value of type T for vertex 'dest'
+	 * @return ArrayList of type String of the steps in the shortest path.
+	 */
+	public List<String> getPath(T source, T dest)
+	{
+		boolean test = Dijkstra(source);
+		if(test==false)
+		{
+			return null;
+		}
+		List<String> path = getShortestPath(findingVertex(dest));
+		return path;
+	}
+
+}
