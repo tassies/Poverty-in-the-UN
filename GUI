@@ -1,0 +1,365 @@
+package mini;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileReader;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+
+@SuppressWarnings("serial")
+public class GUI extends JFrame
+{
+	JFrame myFrame = new JFrame();
+
+	JPanel panel = new JPanel();
+	JPanel homePanel = new JPanel();
+	JPanel panelDonation = new JPanel();
+	JPanel panelReceived = new JPanel();
+	JPanel panelInfrastrure = new JPanel();
+	JPanel panel4 ;
+
+	JScrollBar hbar = new JScrollBar(JScrollBar.HORIZONTAL, 30,20,9,500);
+	JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL,30,40,0,500);
+
+	JTextPane donationTxtPane = new JTextPane();
+	JTextPane HowMuchTxtPane = new JTextPane();
+	JTextPane outcomeTxtPane = new JTextPane();
+	JTextPane introductiontext = new JTextPane();
+	JTextPane secondIntro = new JTextPane();
+	JTextPane thirdIntro = new JTextPane();
+
+	JButton b1 = new JButton("DONATE");
+	JButton b2 = new JButton("CANCEL");
+	JButton b3 = new JButton("AMOUNT NEEDED");
+	JButton b4 = new JButton("INFRASTRUCTURE");
+	JButton b5 = new JButton("CONTINUE");
+	JButton b6 = new JButton();
+
+	public GUI(){
+		// call the Function TextFromFile
+		introduction(introductiontext);
+		secondintroduction(secondIntro);
+		thirdintroduction(thirdIntro);
+
+		Donation(donationTxtPane);
+		amountRecived(HowMuchTxtPane);
+		Infrastructure(outcomeTxtPane);
+
+		//choose font and add font to panels
+		Font font = new Font("",Font.BOLD,23);
+		Font textFont = new Font("", Font.BOLD, 23);
+		introductiontext.setFont(textFont);
+		introductiontext.setEditable(false);
+		secondIntro.setFont(new Font("", Font.BOLD,23));
+		secondIntro.setEditable(false);
+		thirdIntro.setFont(new Font("", Font.BOLD,23));
+		thirdIntro.setEditable(false);
+		donationTxtPane.setFont(font);
+		HowMuchTxtPane.setFont(font);
+		outcomeTxtPane.setFont(font);
+
+		//set color and background of panels and set layout
+		homePanel.setForeground(Color.black);
+		//homePanel.setBackground(new Color(123,149,50));
+		homePanel.setLayout(new FlowLayout());
+		panel.setForeground(Color.black);
+		panel.setBackground(new Color(123,149,50));
+		panel.setLayout(new FlowLayout());
+		introductiontext.setForeground(Color.black);
+		introductiontext.setBackground(new Color(123,123,50));
+		secondIntro.setForeground(Color.black);
+		secondIntro.setBackground(new Color(123,123,50));
+		thirdIntro.setForeground(Color.black);
+		thirdIntro.setBackground(new Color(123,123,50));
+		donationTxtPane.setForeground(Color.black);
+		donationTxtPane.setBackground(new Color(123,149,50));
+		outcomeTxtPane.setForeground(Color.black);
+		outcomeTxtPane.setBackground(new Color(123,149,50));
+		HowMuchTxtPane.setForeground(Color.black);
+		HowMuchTxtPane.setBackground(new Color(123,149,50));
+		panelDonation.setLayout(new BorderLayout());
+
+		//add to panels
+		homePanel.add(introductiontext);
+		homePanel.add(b2);
+		homePanel.add(b5);
+		//button tasks
+		b5.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==b5)
+				{
+					panel4 = new JPanel();
+					panel4.add(secondIntro);
+					
+					panel4.add(b3);
+					panel4.add(b2);
+
+					repaint();
+					myFrame.setSize(1300,800);
+					myFrame.setLocationRelativeTo(null);
+					myFrame.setVisible(true);
+					myFrame.setTitle("SLOVING POVERTY");
+					myFrame.add(panel4);
+				}
+			}
+		});
+
+		b3.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == b3)
+				{
+					JPanel panel1 = new JPanel();
+					for(int i=1; i<4; i++)
+					{
+						panelReceived.add(HowMuchTxtPane,BorderLayout.CENTER);
+						panel1.add(HowMuchTxtPane);
+						panel1.add(b1);
+						
+						/*	b6 = new JButton("R"+i*100);
+							panel1.add(b6);
+							b6.addActionListener(new ActionListener(){
+								@Override
+								public void actionPerformed(ActionEvent f) {
+									if(f.getSource()==b6){
+										panel1.add(thirdIntro);
+									}
+								}
+							});*/
+						panel1.add(b2);
+					}
+					JScrollPane scrollPane = new JScrollPane(panel1);
+					scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+					scrollPane.setBounds(50, 30, 700, 800);
+					JPanel contentPane = new JPanel(null);
+					contentPane.setPreferredSize(new Dimension(1300,800));
+					contentPane.add(scrollPane);
+					contentPane.setBackground(new Color(123,149,50));
+					myFrame.setTitle("AMOUNT NEEDED BY COUNTRY");
+					myFrame.setContentPane(contentPane);
+					myFrame.setBackground(new Color(123,149,50));
+					myFrame.pack();
+					repaint();
+					myFrame.setLocationRelativeTo(null);
+					myFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					myFrame.setVisible(true);
+				}
+			}
+		});	
+
+		b2.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource()==b2)
+				{
+					System.exit(0);
+				}
+			}
+		});
+
+		b1.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == b1)
+				{				
+					JPanel panel2 = new JPanel();
+					for(int i=0; i<100; i++)
+					{
+						panelDonation.add(donationTxtPane,BorderLayout.CENTER);
+						panel2.add(panelDonation);
+						panel2.add(b2);
+						panel2.add(b4);
+					}
+					JScrollPane scrollPane = new JScrollPane(panel2);
+					scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+					scrollPane.setBounds(50, 30, 700, 800);
+					JPanel contentPane = new JPanel(null);
+					contentPane.setPreferredSize(new Dimension(1300,900));
+					contentPane.add(scrollPane);
+					myFrame.setTitle("WHICH COUNTRY DONATED AND HOW MUCH");
+					myFrame.setContentPane(contentPane);
+					myFrame.pack();
+					myFrame.setLocationRelativeTo(null);
+					myFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					myFrame.setVisible(true);
+				}
+			}
+		});
+
+		b4.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == b4)
+				{
+					JPanel panel3 = new JPanel();
+					for(int i=0; i<100; i++)
+					{
+						panelInfrastrure.add(outcomeTxtPane,BorderLayout.CENTER);
+						panel3.add(panelInfrastrure);
+					}
+					JScrollPane scrollPane = new JScrollPane(panel3);
+					scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+					scrollPane.setBounds(50, 30, 700, 800);
+					JPanel contentPane = new JPanel(null);
+					contentPane.setPreferredSize(new Dimension(800, 1300));
+					contentPane.add(scrollPane);
+					myFrame.setTitle("INFRASTRUCTURE THAT SHOULD BE IMPLEMENTED");
+					myFrame.setLocationRelativeTo(null);
+					myFrame.setContentPane(contentPane);
+					myFrame.pack();
+					myFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					myFrame.setVisible(true);
+
+				}
+			}
+		});
+		homePanel.add(panel);
+		add(homePanel);
+	}
+	/*
+    create a function to get the text from a text file 
+	 */ 
+	public void introduction(JTextPane a)
+	{
+		try
+		{
+			//the file path
+			String path = "introduction.txt";
+			File introductionfile = new File(path);
+			FileReader introductionfilereader = new FileReader(introductionfile);
+			while(introductionfilereader.read() != -1){
+				a.read(introductionfilereader,null);
+			}
+			introductionfilereader.close();
+		} 
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}	
+	/*
+create a function to get the text from a text file 
+	 */ 
+	public void secondintroduction(JTextPane a)
+	{
+		try
+		{
+			//the file path
+			String path = "intro2.txt";
+			File introductionfile = new File(path);
+			FileReader introductionfilereader = new FileReader(introductionfile);
+			while(introductionfilereader.read() != -1){
+				a.read(introductionfilereader,null);
+			}
+			introductionfilereader.close();
+		} 
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}	
+	public void thirdintroduction(JTextPane a)
+	{
+		try
+		{
+			//the file path
+			String path = "intro3.txt";
+			File introductionfile = new File(path);
+			FileReader introductionfilereader = new FileReader(introductionfile);
+			while(introductionfilereader.read() != -1){
+				a.read(introductionfilereader,null);
+			}
+			introductionfilereader.close();
+		} 
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+	/*
+			 create a function to get the text from a text file 
+	 */
+	public static void amountRecived(JTextPane a)
+	{
+		try
+		{
+			//the file path
+			String path = "amountRecived.txt";
+			File amountfile = new File(path);
+			FileReader amountfileReader = new FileReader(amountfile);
+			while(amountfileReader.read() != -1){
+				a.read(amountfileReader,null);
+			}
+			amountfileReader.close();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+	/*
+		    create a function to get the text from a text file 
+	 */ 
+	public static void Donation(JTextPane a)
+	{
+		try
+		{
+			//the file path
+			String path = "donation.txt";
+			File donationfile = new File(path);
+			FileReader donationfilereader = new FileReader(donationfile);
+			while(donationfilereader.read() != -1){
+				a.read(donationfilereader,null);
+			}
+			donationfilereader.close();
+		} 
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+	/*
+		    create a function to get the text from a text file 
+	 */ 
+	public static void Infrastructure(JTextPane a)
+	{
+		try
+		{
+			//the file path
+			String path = "data.txt";
+			File Infrastructurefile = new File(path);
+			FileReader Infrastructurefilereader = new FileReader(Infrastructurefile);
+			while(Infrastructurefilereader.read() != -1){
+				a.read(Infrastructurefilereader,null);
+			}
+			Infrastructurefilereader.close();
+		} 
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+}
